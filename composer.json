@@ -1,7 +1,7 @@
 {
     "name"       : "itxq/builder-assets",
     "description": "ThinkPHP5.2专用Html生成器静态资源依赖",
-    "type"       : "builder-assets",
+    "type"       : "wordpress-theme",
     "license"    : "Apache-2.0",
     "authors"    : [
         {
