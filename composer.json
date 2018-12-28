@@ -1,0 +1,14 @@
+{
+    "name"       : "itxq/builder-assets",
+    "description": "ThinkPHP5.2专用Html生成器静态资源依赖",
+    "type"       : "library",
+    "license"    : "Apache-2.0",
+    "authors"    : [
+        {
+            "name" : "IT小强xqitw.cn",
+            "email": "mail@xqitw.cn"
+        }
+    ],
+    "require"    : {},
+    "autoload"   : {}
+}
