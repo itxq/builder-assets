@@ -60,3 +60,12 @@
 }
 
 .builder-create-form .bootstrap-tagsinput .tag {margin: 2px 0;padding-top: 0;padding-bottom: 0; }
+
+/* 拖放时，提前预设DOM节点的class名称，可在此class下定义相应的样式*/
+.sortable-ghost {}
+
+/* 选中时的DOM节点的class名称，可在此class下定义相应的样式 */
+.sortable-chosen {}
+
+/* 拖放时的DOM节点的class名称，可在此class下定义相应的样式 */
+.sortable-drag {}
