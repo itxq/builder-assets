@@ -117,21 +117,73 @@ $(document).on('click', '.map-group .panel-heading', function () {
     $(this).siblings('.group-sub').toggle();
 });
 
-/* 弹框提示 */
-function alertNotify(msg, type) {
-    $.notify({message: msg}, {
-        type: type,
-        delay: 3000,
-        z_index: 9999999,
-        placement: {
-            from: 'top',
-            align: 'right'
-        },
-        offset: {
-            y: 10,
-            x: 10
-        },
-        template: '<div data-notify="container" class="alert alert-{0}" role="alert" style="min-width: 260px;"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>'
+/* 用于多选后发起ajax请求 */
+function doAJaxCheckALL(title, errTitle, url, ajaxCallbackUrl, isTable, id) {
+    let data = getCheckboxSon("son[]", id);
+    if (data.length < 1) {
+        alertNotify(errTitle, 'danger');
+        return false;
+    }
+    var _trueBtn = '<span class="text-light"><i class="fa fa-check"></i>&nbsp;确定</span>';
+    var _falseBtn = '<span class="text-dark"><i class="fa fa fa-times"></i>&nbsp;取消</span>';
+    layer.msg(title, {
+        time: 0,
+        btn: [_trueBtn, _falseBtn],
+        yes: function (index) {
+            layer.close(index);
+            doAjax(url, 'POST', data, ajaxCallbackUrl, isTable);
+        }
     });
 }
 
+/* 获取选中的CheckBox并以数组返回 */
+function getCheckboxSon(name, id) {
+    let data = [];
+    let childBox;
+    if (!id || id === '' || id === null) {
+        childBox = $('input[name="' + name + '"]');
+    } else {
+        childBox = $('#' + id + ' input[name="' + name + '"]');
+    }
+    childBox.each(function () {
+        if ($(this).is(':checked')) {
+            data.push($(this).val())
+        }
+    });
+    return data;
+}
+
+/* ajax请求 */
+function doAjax(ajaxUrl, ajaxType, ajaxData, ajaxCallbackUrl, isTable) {
+    $.ajax({
+        url: ajaxUrl,
+        type: ajaxType,
+        data: {data: ajaxData},
+        dataType: 'json',
+        success: function (re) {
+            re.code = parseInt(re.code);
+            if (re.code !== 1) {
+                alertNotify(re.msg, 'danger');
+            } else if (re.code === 1 && ajaxCallbackUrl !== 'false') {
+                alertNotify(re.msg, 'success');
+                setTimeout(function () {
+                    window.location.href = ajaxCallbackUrl;
+                }, 2000)
+            } else if (re.code === 1 && isTable === 'true') {
+                alertNotify(re.msg, 'success');
+                $('table').bootstrapTable('refresh');
+            } else {
+                alertNotify(re.msg, 'success');
+            }
+        },
+        error: function (re) {
+            alertNotify(re.msg, 'danger');
+            $('.ajax.ajax-action').removeClass('ajax-action');
+        }
+    });
+}
+
+/* 弹框提示 */
+function alertNotify(msg, type) {
+    layer.msg(msg);
+}
