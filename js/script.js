@@ -6,6 +6,16 @@ $('form.builder-create-form').each(function () {
     createBootstrapValidator(formId, validateConfigFields, redirectUrl);
 });
 
+/* 初始化底图选点器 */
+$('.qq-map-group').each(function () {
+    let id = $(this).attr('id');
+    qqMapInit('map-container-' + id, 'map-address-' + id, 'ma-location-' + id);
+});
+
+$(document).on('click', '.map-toggle-btn', function () {
+    $('#' + $(this).attr('data-container')).toggle(800);
+});
+
 /* 初始化标签输入框 */
 $('.bootstrap-tagsinput-role').tagsinput({
     tagClass: function (item) {
@@ -30,6 +40,7 @@ $(document).on('click', '.form-json-group .form-json-group-core .form-json-delet
         $(this).parents('.form-json-item').remove();
     }
 });
+
 /* 添加json表单项 */
 $(document).on('click', '.form-json-group .form-json-group-add .form-json-add', function () {
     var html = $(this).parents('.form-json-group-add').siblings('.form-json-group-demo').html();
