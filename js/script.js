@@ -6,6 +6,12 @@ $('form.builder-create-form').each(function () {
     createBootstrapValidator(formId, validateConfigFields, redirectUrl);
 });
 
+/* 初始化颜色选择器 */
+$('.colorpicker-group-item').each(function () {
+    let id = '#' + $(this).attr('id');
+    $(id).colorpicker({format: $(this).attr('data-format')});
+});
+
 /* 重置表单按钮 */
 $(document).on("click", "form .form-reset-btn", function () {
     $(this).parents("form.builder-create-form").bootstrapValidator("resetForm");
