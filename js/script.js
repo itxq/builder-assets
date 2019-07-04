@@ -1,3 +1,16 @@
+/* 初始化表单 */
+$('form.builder-create-form').each(function () {
+    let formId = '#' + $(this).attr('id');
+    let validateConfigFields = $(formId + '_validate_config').val();
+    let redirectUrl = $(formId + '_redirect_url').val();
+    createBootstrapValidator(formId, validateConfigFields, redirectUrl);
+});
+
+/* 重置表单按钮 */
+$(document).on("click", "form .form-reset-btn", function () {
+    $(this).parents("form.builder-create-form").bootstrapValidator("resetForm");
+});
+
 /* 删除json表单项 */
 $(document).on('click', '.form-json-group .form-json-group-core .form-json-delete', function () {
     if ($(this).parents('.form-json-item').siblings('.form-json-item').length >= 1) {
@@ -23,7 +36,7 @@ function addTrigger(name, subName, url, isReady, formID, triggerObj) {
             ajaxSelect(url, _this_val, subName, formID, triggerObj);
         }
     });
-    
+
     $(document).on('change', '[name="' + name + '"]', function () {
         var data = $(this).val();
         ajaxSelect(url, data, subName, formID, triggerObj);
@@ -186,4 +199,57 @@ function doAjax(ajaxUrl, ajaxType, ajaxData, ajaxCallbackUrl, isTable) {
 /* 弹框提示 */
 function alertNotify(msg, type) {
     layer.msg(msg);
+}
+
+/* 表单验证提交 */
+function createBootstrapValidator(formId, validateConfigFields, redirectUrl) {
+    let validateConfig = {};
+    validateConfig.message = '表单验证未通过';
+    validateConfig.feedbackIcons = {
+        valid: 'fa fa-check',
+        invalid: 'fa fa-times',
+        validating: 'fa fa-refresh'
+    };
+    validateConfig.fields = eval('(' + validateConfigFields + ')');
+    $(formId).bootstrapValidator(validateConfig).on('success.form.bv', function (e) {
+        e.preventDefault();
+        if (typeof CKEDITOR !== 'undefined') {
+            var ckeditorInstance;
+            for (ckeditorInstance in CKEDITOR.instances) {
+                CKEDITOR.instances[ckeditorInstance].updateElement();
+            }
+        }
+        if ($(e.target).attr('action') === '' || $(e.target).attr('action') === null) {
+            $(formId).bootstrapValidator('disableSubmitButtons', false);
+            return false;
+        }
+        $.ajax({
+            url: $(e.target).attr('action'),
+            type: $(e.target).attr('method'),
+            data: $(e.target).serialize(),
+            dataType: 'json',
+            success: function (re) {
+                if (re.code === 1) {
+                    $(formId)[0].reset();
+                    $(formId).bootstrapValidator('resetForm');
+                    alertNotify(re.msg, 'success');
+                    if (re.url && re.url !== '' && re.url !== null) {
+                        redirectUrl = re.url;
+                    }
+                    if (typeof redirectUrl !== 'undefined' && redirectUrl !== '' && redirectUrl !== null) {
+                        setTimeout(function () {
+                            window.location.href = redirectUrl;
+                        }, 1500);
+                    }
+                } else {
+                    $(formId).bootstrapValidator('disableSubmitButtons', false);
+                    alertNotify(re.msg, 'danger');
+                }
+            },
+            error: function () {
+                $(formId).bootstrapValidator('disableSubmitButtons', false);
+                alertNotify('网络错误,请重试...', 'danger');
+            }
+        });
+    });
 }
