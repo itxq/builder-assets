@@ -6,6 +6,13 @@ $('form.builder-create-form').each(function () {
     createBootstrapValidator(formId, validateConfigFields, redirectUrl);
 });
 
+/* 初始化标签输入框 */
+$('.bootstrap-tagsinput-role').tagsinput({
+    tagClass: function (item) {
+        return 'btn btn-info btn-sm';
+    }
+});
+
 /* 初始化颜色选择器 */
 $('.colorpicker-group-item').each(function () {
     let id = '#' + $(this).attr('id');

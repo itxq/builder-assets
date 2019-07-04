@@ -48,7 +48,6 @@
 .builder-create-form .bootstrap-tagsinput {width: 100% !important; outline: none;
     display: block;
     height: calc(2.25rem + 2px);
-    padding: .375rem .75rem;
     font-size: 1rem;
     line-height: 1.5;
     color: #495057;
@@ -59,7 +58,7 @@
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.builder-create-form .bootstrap-tagsinput .tag {margin: 2px 0;padding-top: 0;padding-bottom: 0; }
+.builder-create-form .bootstrap-tagsinput .tag {padding-top: 0;}
 
 /* 拖放时，提前预设DOM节点的class名称，可在此class下定义相应的样式*/
 .sortable-ghost {}
