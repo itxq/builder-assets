@@ -6,6 +6,9 @@ $('form.builder-create-form').each(function () {
     createBootstrapValidator(formId, validateConfigFields, redirectUrl);
 });
 
+/* 初始化 */
+$('.select2-selectpicker').selectpicker('render');
+
 /* 初始化 日期范围选择器 */
 $('.daterangepicker-input').each(function () {
     let id = '#' + $(this).attr('id');
