@@ -404,3 +404,31 @@ function createJsTree(id, data, value) {
         $('#' + id).val(selectedIds);
     });
 }
+
+/* CKFinder */
+function selectFileWithCKFinder(elementId, apiUrl) {
+    CKFinder.modal({
+        displayFoldersPanel: false,
+        //  readOnly: true,
+        skin: 'neko',
+        // skin: 'jquery-mobile',
+        swatch: 'b',
+        connectorPath: apiUrl,
+        chooseFiles: true,
+        width: 800,
+        height: 600,
+        lugins: [],
+        onInit: function (finder) {
+            finder.on('files:choose', function (evt) {
+                var file = evt.data.files.first();
+                var output = document.getElementById(elementId);
+                output.value = file.getUrl();
+            });
+
+            finder.on('file:choose:resizedImage', function (evt) {
+                var output = document.getElementById(elementId);
+                output.value = evt.data.resizedUrl;
+            });
+        }
+    });
+}
