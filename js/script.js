@@ -6,7 +6,16 @@ $('form.builder-create-form').each(function () {
     createBootstrapValidator(formId, validateConfigFields, redirectUrl);
 });
 
-/* 初始化 ckeditor*/
+/* 初始化 JsTree */
+$('.js-tree-input').each(function () {
+    let id = $(this).attr('id');
+    let value = $(this).val();
+    let data = $(this).attr('data-list');
+    createJsTree(id, data, value)
+});
+
+
+/* 初始化 ckeditor */
 $('.ckeditor-textarea').each(function () {
     let ckID = $(this).attr('id');
     let conId = '#' + ckID + '_js_con';
@@ -15,7 +24,7 @@ $('.ckeditor-textarea').each(function () {
     createCkeditor(ckID, conId, uploadUrl, apiUrl);
 });
 
-/* 初始化 select2 选择器*/
+/* 初始化 select2 选择器 */
 $('.select2-selectpicker').selectpicker('render');
 
 /* 初始化 日期范围选择器 */
@@ -347,7 +356,7 @@ function createDateRangepicker(id, startDate, endDateDate) {
 function createCkeditor(ckID, conId, uploadUrl, apiUrl) {
     let config = {
         skin: "moono-lisa",
-        uiColor: "#ffffff",
+        uiColor: "#FFFFFF",
     };
     let ck_finder_api_title = '来自编辑器 CKEditor';
     let ck_finder_api_skin = 'neko';
@@ -357,4 +366,41 @@ function createCkeditor(ckID, conId, uploadUrl, apiUrl) {
         config.filebrowserBrowseUrl = filebrowserBrowseUrl;
     }
     CKEDITOR.replace(ckID, config).setData($(conId).html());
+}
+
+/* 创建 js treee */
+function createJsTree(id, data, value) {
+    $('#tree_' + id).jstree({
+        "plugins": ["checkbox", "types", "themes"],
+        "checkbox": {
+            "keep_selected_style": false,
+            "tie_selection": true,
+            "whole_node": true,
+            "three_state": false
+        },
+        "types": {
+            "default": {"icon": "fa fa-file icon-state-warning icon-lg"},
+            "folder": {"icon": "fa fa-folder icon-state-warning icon-lg"},
+            "file": {"icon": "fa fa-file icon-state-warning icon-lg"}
+        },
+        "core": {
+            "multiple": true,
+            "themes": {"stripes": false, "variant": "large", "responsive": false, "ellipsis": true},
+            "check_callback": true,
+            "data": eval('(' + data + ')')
+        }
+    }).on('loaded.jstree', function (e, data) {
+        let inst = data.instance;
+        if (value !== '') {
+            let nodeList = value.split(',');
+            $.each(nodeList, function (i, v) {
+                inst.select_node(inst.get_node(v));
+            });
+        }
+    }).on("changed.jstree", function (e, data) {
+        let treeId = "tree_" + id;
+        let selectedIds = $('#' + treeId).jstree(true).get_selected(false);
+        selectedIds = selectedIds.join(',');
+        $('#' + id).val(selectedIds);
+    });
 }
