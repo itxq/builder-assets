@@ -6,7 +6,16 @@ $('form.builder-create-form').each(function () {
     createBootstrapValidator(formId, validateConfigFields, redirectUrl);
 });
 
-/* 初始化 */
+/* 初始化 ckeditor*/
+$('.ckeditor-textarea').each(function () {
+    let ckID = $(this).attr('id');
+    let conId = '#' + ckID + '_js_con';
+    let uploadUrl = $(this).attr('data-upload');
+    let apiUrl = $(this).attr('data-api');
+    createCkeditor(ckID, conId, uploadUrl, apiUrl);
+});
+
+/* 初始化 select2 选择器*/
 $('.select2-selectpicker').selectpicker('render');
 
 /* 初始化 日期范围选择器 */
@@ -332,4 +341,20 @@ function createDateRangepicker(id, startDate, endDateDate) {
         dateRangepickerConfig.endDate = endDateDate;
     }
     $(id).daterangepicker(dateRangepickerConfig);
+}
+
+/* 创建 Ckeditor */
+function createCkeditor(ckID, conId, uploadUrl, apiUrl) {
+    let config = {
+        skin: "moono-lisa",
+        uiColor: "#ffffff",
+    };
+    let ck_finder_api_title = '来自编辑器 CKEditor';
+    let ck_finder_api_skin = 'neko';
+    let ck_finder_api_swatch = 'b';
+    let filebrowserBrowseUrl = uploadUrl + '?ck_finder_api_title=' + ck_finder_api_title + '&ck_finder_api_skin=' + ck_finder_api_skin + '&ck_finder_api_swatch=' + ck_finder_api_swatch + '&ck_finder_api_url=' + apiUrl;
+    if (apiUrl && apiUrl !== '') {
+        config.filebrowserBrowseUrl = filebrowserBrowseUrl;
+    }
+    CKEDITOR.replace(ckID, config).setData($(conId).html());
 }
