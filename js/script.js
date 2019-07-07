@@ -406,7 +406,7 @@ function createJsTree(id, data, value) {
 }
 
 /* CKFinder */
-function selectFileWithCKFinder(elementId, apiUrl) {
+function selectFileWithCKFinder(elementId, srcID, apiUrl) {
     CKFinder.modal({
         displayFoldersPanel: false,
         //  readOnly: true,
@@ -423,12 +423,20 @@ function selectFileWithCKFinder(elementId, apiUrl) {
                 var file = evt.data.files.first();
                 var output = document.getElementById(elementId);
                 output.value = file.getUrl();
+                document.getElementById(srcID).src = output.value;
             });
 
             finder.on('file:choose:resizedImage', function (evt) {
                 var output = document.getElementById(elementId);
                 output.value = evt.data.resizedUrl;
+                document.getElementById(srcID).src = output.value;
             });
         }
     });
+}
+
+/* 删除图片 */
+function delCKFinderFileOne(id, srcID, defaultImg) {
+    $('#' + id).val('');
+    $('#' + srcID).attr('src', defaultImg);
 }
