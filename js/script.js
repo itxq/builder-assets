@@ -420,16 +420,13 @@ function selectFileWithCKFinder(elementId, srcID, apiUrl) {
         lugins: [],
         onInit: function (finder) {
             finder.on('files:choose', function (evt) {
-                var file = evt.data.files.first();
-                var output = document.getElementById(elementId);
-                output.value = file.getUrl();
-                document.getElementById(srcID).src = output.value;
+                document.getElementById(elementId).value = evt.data.files.first().getUrl();
+                document.getElementById(srcID).src = evt.data.files.first().getUrl();
             });
 
             finder.on('file:choose:resizedImage', function (evt) {
-                var output = document.getElementById(elementId);
-                output.value = evt.data.resizedUrl;
-                document.getElementById(srcID).src = output.value;
+                document.getElementById(elementId).value = evt.data.resizedUrl;
+                document.getElementById(srcID).src = evt.data.resizedUrl;
             });
         }
     });

@@ -1,4 +1,19 @@
 /* 基础设置 */
+/* 这是针对缺省样式 (必须的) */
+::-webkit-scrollbar {width: 5px;height: 5px;}
+
+/* 滚动条的滑轨背景颜色 */
+::-webkit-scrollbar-track {background-color: rgba(0, 0, 0, 0.6);-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+
+/* 滑块颜色 */
+::-webkit-scrollbar-thumb {background-color: rgba(0, 0, 0, 0.8);-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+
+/* 滑轨两头的监听按钮颜色 */
+::-webkit-scrollbar-button {-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;width: 0;height: 0;background-color: rgba(0, 0, 0, 0.9);}
+
+/* 横向滚动条和纵向滚动条相交处尖角的颜色 */
+::-webkit-scrollbar-corner {background-color: rgba(0, 0, 0, 0.9);}
+
 .builder-create-form {margin: 1rem;overflow: hidden; }
 
 .builder-create-form * {outline: 0 !important;box-shadow: none !important;}
