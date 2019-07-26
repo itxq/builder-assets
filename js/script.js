@@ -407,6 +407,7 @@ function createJsTree(id, data, value) {
 
 /* CKFinder */
 function selectFileWithCKFinder(elementId, srcID, apiUrl) {
+    //console.log(elementId,srcID,apiUrl);return;
     CKFinder.modal({
         displayFoldersPanel: false,
         //  readOnly: true,
@@ -420,13 +421,14 @@ function selectFileWithCKFinder(elementId, srcID, apiUrl) {
         lugins: [],
         onInit: function (finder) {
             finder.on('files:choose', function (evt) {
-                document.getElementById(elementId).value = evt.data.files.first().getUrl();
-                document.getElementById(srcID).src = evt.data.files.first().getUrl();
+                let _url = evt.data.files.first().getUrl();
+                document.getElementById(elementId).value = _url;
+                document.getElementById(srcID).src = _url;
             });
-
             finder.on('file:choose:resizedImage', function (evt) {
-                document.getElementById(elementId).value = evt.data.resizedUrl;
-                document.getElementById(srcID).src = evt.data.resizedUrl;
+                let _url = evt.data.resizedUrl;
+                document.getElementById(elementId).value = _url;
+                document.getElementById(srcID).src = _url;
             });
         }
     });
